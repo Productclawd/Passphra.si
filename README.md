@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Passphra.si
 
-## Getting Started
+**Check it's really them before you send money or a code.**
 
-First, run the development server:
+Voices and faces can now be cloned in real time. Passphra.si gives you and your family two words that change every minute. When someone calls asking for money or a code, you each say your word. A copied voice can't know them.
+
+**Use it:** https://productclawd.github.io/Passphra.si/ (install it to your home screen and it works without signal).
+
+This repository is the full source, so you can check the claims below yourself.
+
+## What it promises, and where to check
+
+| Claim | Where to look |
+| --- | --- |
+| No server, no account, no analytics. Nothing you type leaves the phone. | There is no backend. The site is static files (`output: "export"` in `next.config.ts`), and no code calls `fetch` with your data. |
+| Your key can't be read back out, even by the app's own code. | `src/lib/passphrasi/words-engine.ts`: `importSecret` imports with `extractable: false`. Keys are stored as `CryptoKey`s in IndexedDB (`src/lib/passphrasi/store.ts`). |
+| A word heard on a call is useless a minute later. | `wordsForWindow`: HMAC-SHA256 over the current 60-second window (the same construction as 2FA codes, rendered as a word). |
+| Hearing your word tells an impostor nothing about theirs. | Each side's word comes from a different HMAC label (`A\|window`, `B\|window`). |
+| Pairing by link never sends the secret. | `src/lib/passphrasi/remote-pairing.ts`: each link carries only an ECDH P-256 *public* key, and both phones derive the key locally. |
+
+## How pairing works
+
+- **In person (recommended):** one phone shows a QR code holding a fresh random 32-byte secret, and the other scans it. The QR is deliberately not a URL, so a camera app that scans it opens nothing.
+- **By link:** the inviter sends a link with their public key. The other person accepts and sends one back with theirs. Each phone runs ECDH followed by HKDF and ends up with the same key. To catch someone swapping both links in transit, both phones show a check word that you compare out loud before saving.
+
+The app works offline. The service worker (`public/sw.js`) caches only the app's own build files. Names and keys live in IndexedDB and never pass through it.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+npm run dev      # http://localhost:3000/Passphra.si
+npm run build    # static site in ./out
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Every push to `main` deploys to GitHub Pages (`.github/workflows/pages.yml`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Do not reorder `src/lib/passphrasi/words.ts`. Paired phones agree on word positions, so any change to the list needs a version bump.

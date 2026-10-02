@@ -1,0 +1,954 @@
+/*
+ * Passphra.si — "calm & trustworthy". Every rule is scoped under .pps so none
+ * of it leaks into the rest of the site.
+ *
+ * Text size: every font-size below is in `em` against the .pps root, and only
+ * leaf text elements set one — so on iPhones, where .pps takes the system's
+ * `-apple-system-body` size, the whole app follows the phone's Text Size
+ * setting. Android Chrome scales px text with its own font-size setting.
+ */
+
+.pps {
+  --pps-bg: #faf9f5;
+  --pps-card: #ffffff;
+  --pps-border: #e6e2d8;
+  --pps-hairline: #eeebe3;
+  --pps-mono-fill: #f1eee6;
+  --pps-mono-border: #ddd8cc;
+  --pps-navy: #16325c;
+  --pps-ink: #0f1b2d;
+  --pps-ink-2: #4b5568;
+  --pps-green: #1f6b4e;
+  --pps-green-bg: #edf5f0;
+  --pps-red: #9f2b2b;
+  --pps-red-bg: #fbefee;
+  --pps-serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --pps-sans: var(--font-atkinson), system-ui, -apple-system, sans-serif;
+
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--pps-bg);
+  color: var(--pps-ink);
+  font-family: var(--pps-sans);
+  font-size: 18px;
+  line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@supports (font: -apple-system-body) {
+  .pps {
+    font: -apple-system-body;
+    font-family: var(--pps-sans);
+    line-height: 1.4;
+  }
+}
+
+.pps *,
+.pps *::before,
+.pps *::after {
+  box-sizing: border-box;
+}
+
+/* Resets sit in :where() (zero specificity) so every .pps-* class below wins. */
+:where(.pps) :where(p, h1, h2, ol, ul) {
+  margin: 0;
+  padding: 0;
+}
+
+:where(.pps) :where(button, input) {
+  font: inherit;
+  color: inherit;
+}
+
+.pps :focus-visible {
+  outline: 3px solid var(--pps-navy);
+  outline-offset: 3px;
+}
+
+.pps-main {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.pps-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: calc(env(safe-area-inset-top, 0px) + 20px) 20px
+    calc(env(safe-area-inset-bottom, 0px) + 24px);
+}
+
+/* ── Type ─────────────────────────────────────────────────────────────── */
+
+.pps-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pps-navy);
+  font-weight: 700;
+  font-size: 1.05em;
+  letter-spacing: 0.01em;
+}
+
+.pps-greeting {
+  font-size: 1.15em;
+  color: var(--pps-ink-2);
+  margin-top: 12px;
+}
+
+.pps-headline {
+  font-family: var(--pps-serif);
+  font-weight: 500;
+  font-size: 2.2em; /* ~40px at the default size */
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--pps-ink);
+}
+
+.pps-headline-inline {
+  font-size: 1.9em;
+}
+
+.pps-subhead {
+  font-family: var(--pps-serif);
+  font-weight: 500;
+  font-size: 1.5em;
+  margin-top: 16px;
+}
+
+.pps-body {
+  font-size: 1.15em; /* ~20px */
+  color: var(--pps-ink);
+}
+
+.pps-small {
+  font-size: 1em;
+  color: var(--pps-ink-2);
+}
+
+.pps-hint {
+  font-size: 0.9em; /* the floor: never below ~15px */
+  color: var(--pps-ink-2);
+}
+
+.pps-caps {
+  font-size: 0.9em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pps-ink-2);
+}
+
+.pps-warn {
+  color: var(--pps-red);
+}
+
+.pps-footnote {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.9em;
+  color: var(--pps-ink-2);
+  margin-top: 16px;
+}
+
+.pps-footnote svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--pps-navy);
+}
+
+/* ── Rule panel + cards ───────────────────────────────────────────────── */
+
+.pps-rule {
+  border: 1px solid var(--pps-border);
+  border-radius: 16px;
+  padding: 16px 18px;
+  font-size: 1.1em;
+  color: var(--pps-ink);
+}
+
+.pps-rule strong {
+  color: var(--pps-navy);
+}
+
+.pps-card {
+  background: var(--pps-card);
+  border: 1px solid var(--pps-border);
+  border-radius: 18px;
+  list-style: none;
+}
+
+.pps-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+/* ── People list ──────────────────────────────────────────────────────── */
+
+.pps-list > li + li {
+  border-top: 1px solid var(--pps-hairline);
+}
+
+.pps-row {
+  width: 100%;
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px 14px 18px;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pps-row-compact {
+  min-height: 76px;
+}
+
+.pps-row:active {
+  background: var(--pps-bg);
+}
+
+.pps-list > li:first-child .pps-row {
+  border-radius: 18px 18px 0 0;
+}
+
+.pps-list > li:last-child .pps-row {
+  border-radius: 0 0 18px 18px;
+}
+
+.pps-list > li:only-child .pps-row {
+  border-radius: 18px;
+}
+
+.pps-row-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pps-row-name {
+  font-size: 1.4em; /* ~25px */
+  font-weight: 700;
+  color: var(--pps-ink);
+  overflow-wrap: anywhere;
+}
+
+.pps-row-rel {
+  font-size: 1em;
+  color: var(--pps-ink-2);
+}
+
+.pps-row-chevron {
+  flex: none;
+  color: var(--pps-navy);
+}
+
+.pps-monogram {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--pps-mono-fill);
+  border: 1px solid var(--pps-mono-border);
+  color: var(--pps-navy);
+  font-family: var(--pps-serif);
+  font-weight: 500;
+  overflow: hidden;
+}
+
+.pps-monogram img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pps-monogram-md {
+  width: 56px;
+  height: 56px;
+  font-size: 1.5em;
+}
+
+.pps-monogram-lg {
+  width: 72px;
+  height: 72px;
+  font-size: 2em;
+}
+
+.pps-home-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+/* ── Links + buttons ──────────────────────────────────────────────────── */
+
+.pps-link {
+  background: none;
+  border: 0;
+  padding: 12px 4px;
+  min-height: 48px;
+  font-size: 1.05em;
+  font-weight: 700;
+  color: var(--pps-navy);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.pps-link-quiet {
+  color: var(--pps-ink-2);
+  font-weight: 400;
+}
+
+.pps-link-center {
+  align-self: center;
+}
+
+.pps-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 48px;
+  padding: 8px 12px 8px 0;
+  background: none;
+  border: 0;
+  color: var(--pps-navy);
+  font-size: 1.1em;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pps-topbar {
+  display: flex;
+  align-items: center;
+  margin-bottom: -4px;
+}
+
+.pps-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.pps-btn {
+  width: 100%;
+  min-height: 68px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 2px solid transparent;
+  font-size: 1.15em;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pps-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.pps-btn-inline {
+  width: auto;
+  min-height: 56px;
+  flex: none;
+}
+
+.pps-btn-primary {
+  background: var(--pps-navy);
+  color: #ffffff;
+}
+
+.pps-btn-outline {
+  background: var(--pps-card);
+  border-color: var(--pps-navy);
+  color: var(--pps-navy);
+}
+
+.pps-btn-danger {
+  background: var(--pps-red);
+  color: #ffffff;
+}
+
+.pps-btn-danger-outline {
+  background: var(--pps-card);
+  border-color: var(--pps-red);
+  color: var(--pps-red);
+}
+
+/* ── Verify ───────────────────────────────────────────────────────────── */
+
+.pps-checking {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pps-checking-label {
+  font-size: 1em;
+  color: var(--pps-ink-2);
+}
+
+.pps-checking-name {
+  font-family: var(--pps-serif);
+  font-weight: 500;
+  font-size: 2.2em;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.pps-words-half {
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pps-words-half + .pps-words-half {
+  border-top: 1px solid var(--pps-hairline);
+}
+
+.pps-word {
+  font-family: var(--pps-serif);
+  font-weight: 500;
+  font-size: min(3.4em, 15vw); /* ~60px; long words still fit a narrow phone */
+  line-height: 1.1;
+  color: var(--pps-navy);
+  overflow-wrap: anywhere;
+}
+
+.pps-word-sm {
+  font-size: min(2.6em, 12vw);
+}
+
+.pps-also {
+  font-size: 0.95em;
+  color: var(--pps-ink-2);
+  margin-top: 6px;
+}
+
+.pps-also strong {
+  color: var(--pps-navy);
+  font-size: 1.1em;
+}
+
+.pps-timer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pps-timer-track {
+  height: 3px;
+  border-radius: 3px;
+  background: var(--pps-hairline);
+  overflow: hidden;
+}
+
+.pps-timer-fill {
+  height: 100%;
+  background: var(--pps-navy);
+  transition: width 250ms linear;
+}
+
+.pps-timer-text {
+  font-size: 1em;
+  color: var(--pps-ink-2);
+}
+
+/* ── Results ──────────────────────────────────────────────────────────── */
+
+.pps-result-ok {
+  background: var(--pps-green-bg);
+}
+
+.pps-result-bad {
+  background: var(--pps-red-bg);
+}
+
+/* Paint the full viewport behind the narrow column too. */
+.pps:has(.pps-result-ok) {
+  background: var(--pps-green-bg);
+}
+.pps:has(.pps-result-bad) {
+  background: var(--pps-red-bg);
+}
+
+.pps-result-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding-top: 32px;
+}
+
+.pps-result-mark {
+  width: 112px;
+  height: 112px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.pps-result-mark-ok {
+  background: var(--pps-green);
+}
+
+.pps-result-mark-bad {
+  background: var(--pps-red);
+}
+
+.pps-result-mark-navy {
+  background: var(--pps-navy);
+}
+
+.pps-caps-ok {
+  color: var(--pps-green);
+}
+
+.pps-caps-bad {
+  color: var(--pps-red);
+}
+
+.pps-steps {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.pps-steps > li {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 18px 20px;
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+.pps-steps > li + li {
+  border-top: 1px solid var(--pps-hairline);
+}
+
+.pps-step-n {
+  flex: none;
+  font-family: var(--pps-serif);
+  font-size: 1.2em;
+  color: var(--pps-red);
+}
+
+.pps-steps > li.pps-steps-note {
+  display: block;
+  font-size: 1em;
+  font-weight: 400;
+  color: var(--pps-ink-2);
+}
+
+/* ── Pairing ──────────────────────────────────────────────────────────── */
+
+.pps-qr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pps-qr svg {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+}
+
+.pps-note {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 1em;
+  color: var(--pps-ink-2);
+}
+
+.pps-note svg {
+  flex: none;
+  color: var(--pps-navy);
+  margin-top: 1px;
+}
+
+.pps-scan {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--pps-ink);
+}
+
+.pps-scan-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pps-scan-frame {
+  position: absolute;
+  inset: 16%;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  border-radius: 18px;
+}
+
+.pps-scan-error {
+  padding: 20px;
+  border: 1px solid var(--pps-border);
+  border-radius: 18px;
+  background: var(--pps-card);
+  font-size: 1.05em;
+}
+
+.pps-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+}
+
+.pps-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pps-label {
+  font-size: 1.05em;
+  font-weight: 700;
+}
+
+.pps-input {
+  width: 100%;
+  min-height: 60px;
+  padding: 12px 16px;
+  border: 1px solid var(--pps-mono-border);
+  border-radius: 14px;
+  background: var(--pps-card);
+  font-size: 1.15em;
+}
+
+.pps-input::placeholder {
+  color: #8a91a0;
+}
+
+.pps-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pps-chip {
+  min-height: 48px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--pps-mono-border);
+  background: var(--pps-card);
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.pps-chip-on {
+  background: var(--pps-navy);
+  border-color: var(--pps-navy);
+  color: #ffffff;
+}
+
+.pps-photo-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pps-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.pps-confirm-remove {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+}
+
+/* ── Fridge card ──────────────────────────────────────────────────────── */
+
+.pps-fridge {
+  background: var(--pps-card);
+  border: 1px solid var(--pps-border);
+  border-radius: 18px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.pps-fridge-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pps-navy);
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+.pps-fridge-rule {
+  font-family: var(--pps-serif);
+  font-weight: 500;
+  font-size: 2em;
+  line-height: 1.15;
+}
+
+.pps-fridge-rule strong {
+  color: var(--pps-navy);
+  font-weight: 600;
+}
+
+.pps-fridge-steps {
+  list-style: decimal;
+  padding-left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 1.15em;
+}
+
+.pps-fridge-label {
+  font-size: 0.9em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pps-ink-2);
+  border-top: 1px solid var(--pps-hairline);
+  padding-top: 16px;
+}
+
+.pps-fridge-people {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 1.3em;
+}
+
+.pps-fridge-foot {
+  font-size: 1em;
+  color: var(--pps-ink-2);
+}
+
+/* ── Pairing by link ───────────────────────────────────────────────────── */
+
+.pps-link-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pps-linkbox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.pps-linkbox-url {
+  padding: 12px 14px;
+  border: 1px solid var(--pps-border);
+  border-radius: 12px;
+  background: var(--pps-mono-fill);
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.8em;
+  color: var(--pps-ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pps-linkbox-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pps-paste {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.pps-paste .pps-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.pps-divider {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--pps-hairline);
+  margin: 8px 0;
+}
+
+.pps-pending {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.pps-pending-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 18px 20px;
+}
+
+/* ── Open-source link ──────────────────────────────────────────────────── */
+
+.pps-source {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: center;
+  min-height: 48px;
+  font-size: 0.9em;
+  color: var(--pps-ink-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── How it works (first run) ──────────────────────────────────────────── */
+
+.pps-how {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  margin: 0;
+}
+
+.pps-how-phones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.pps-how-phone {
+  padding: 14px 14px 16px;
+  border: 1.5px solid var(--pps-border);
+  border-radius: 22px;
+  background: var(--pps-card);
+}
+
+.pps-how-owner {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--pps-hairline);
+  font-size: 0.85em;
+  font-weight: 700;
+  color: var(--pps-ink-2);
+}
+
+.pps-how-label {
+  font-size: 0.8em;
+  color: var(--pps-ink-2);
+}
+
+.pps-how-word {
+  font-family: var(--pps-serif);
+  font-weight: 500;
+  font-size: 1.6em;
+  line-height: 1.15;
+  color: var(--pps-navy);
+  overflow-wrap: anywhere;
+}
+
+.pps-how-word + .pps-how-label {
+  margin-top: 6px;
+}
+
+.pps-how-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pps-how-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.95em;
+}
+
+.pps-how-row svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.pps-how-ok {
+  color: var(--pps-green);
+  font-weight: 700;
+}
+
+.pps-how-bad {
+  color: var(--pps-red);
+  font-weight: 700;
+}
+
+.pps-how-note {
+  color: var(--pps-ink-2);
+}
+
+@media print {
+  @page {
+    margin: 16mm;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .pps-fridge,
+  .pps-fridge * {
+    visibility: visible;
+  }
+  .pps-fridge {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: 2px solid #0f1b2d;
+    font-size: 20px;
+  }
+  .pps-no-print {
+    display: none !important;
+  }
+}
