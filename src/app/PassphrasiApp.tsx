@@ -337,14 +337,12 @@ function SetupScreen({ onDone }: { onDone: (name: string) => Promise<void> }) {
       </header>
       <h1 className="pps-headline">Check it&rsquo;s really them</h1>
       <p className="pps-body">
-        Voices and faces can be copied. Passphra.si gives you and your family two words that change
-        every minute, so you can check who you&rsquo;re talking to before sending money or a code.
+        Voices can be faked. Two words that change every minute tell you it&rsquo;s really them.
       </p>
-      <HowItWorks />
       <ExplainerVideo />
+      <HowItWorks />
       <p className="pps-small">
-        Best set up together, in person, or by sending a link. No account, no sign-up, and your
-        words are never sent anywhere.
+        1 min setup. No account, no sign-up, and your words are never sent anywhere.
       </p>
 
       <label className="pps-field">
@@ -360,7 +358,7 @@ function SetupScreen({ onDone }: { onDone: (name: string) => Promise<void> }) {
         />
       </label>
 
-      <InstallHelp />
+      <InstallHelp moment="setup" />
 
       <div className="pps-actions">
         <button

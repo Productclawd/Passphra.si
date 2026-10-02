@@ -40,9 +40,6 @@ export function HowItWorks() {
           <ExclamationIcon size={20} strokeWidth={2.5} />
           Wrong word, or none: hang up and call them back.
         </span>
-        <span className="pps-how-row pps-how-note">
-          The words change every minute. A copied voice can&rsquo;t know them.
-        </span>
       </figcaption>
     </figure>
   );

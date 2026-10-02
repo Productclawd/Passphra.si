@@ -34,7 +34,19 @@ function isIos(): boolean {
   return /iPhone|iPad|iPod/.test(navigator.userAgent);
 }
 
-export function InstallHelp() {
+interface InstallHelpProps {
+  /**
+   * "setup": before anyone is paired. Shown on iPhone only, because a
+   * home-screen app there gets its OWN storage, separate from Safari's:
+   * pairing first and installing after would leave an empty app.
+   * "paired": after the first person is saved. Shown everywhere else, where
+   * the installed app shares the browser's storage, so it can wait.
+   * "settings": always, while it isn't installed.
+   */
+  moment: "setup" | "paired" | "settings";
+}
+
+export function InstallHelp({ moment }: InstallHelpProps) {
   const [, force] = useState(0);
   // False while server-rendering, true in the browser — without a re-render loop.
   const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
@@ -49,9 +61,8 @@ export function InstallHelp() {
 
   if (!mounted) return null;
 
-  if (isInstalled()) {
-    return <p className="pps-small">Passphra.si is on this phone&rsquo;s home screen. It works without signal.</p>;
-  }
+  if (isInstalled()) return null;
+  if (moment !== "settings" && (moment === "setup") !== isIos()) return null;
 
   if (deferredPrompt) {
     return (
