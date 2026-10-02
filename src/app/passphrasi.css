@@ -929,6 +929,24 @@
   color: var(--pps-ink-2);
 }
 
+/* ── Explainer video ───────────────────────────────────────────────────── */
+
+.pps-video {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+}
+
+.pps-video-player {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1.5px solid var(--pps-border);
+  border-radius: 22px;
+  background: var(--pps-card);
+}
+
 @media print {
   @page {
     margin: 16mm;
