@@ -180,6 +180,7 @@ export function PassphrasiApp() {
       return (
         <PairingFlow
           ownerName={ownerName}
+          people={people}
           existing={screen.repairId ? personFor(screen.repairId) ?? null : null}
           nav={nav}
           onSaved={async () => {
@@ -246,6 +247,20 @@ export function PassphrasiApp() {
   }
 }
 
+function sameNameCount(people: Person[], name: string): number {
+  const key = name.trim().toLowerCase();
+  return people.filter((p: Person) => p.name.trim().toLowerCase() === key).length;
+}
+
+function addedOn(ms: number): string {
+  return new Date(ms).toLocaleString(undefined, {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 interface HomeScreenProps {
   ownerName: string;
   people: Person[];
@@ -281,7 +296,12 @@ function HomeScreen({ ownerName, people, invites, nav, onChanged }: HomeScreenPr
                 <Monogram name={p.name} photo={p.photo} />
                 <span className="pps-row-text">
                   <span className="pps-row-name">{p.name}</span>
-                  {p.relationship && <span className="pps-row-rel">{p.relationship}</span>}
+                  {sameNameCount(people, p.name) > 1 ? (
+                    // Pairings made before re-pairing replaced old entries: tell them apart.
+                    <span className="pps-row-rel">Added {addedOn(p.pairedAt)}</span>
+                  ) : (
+                    p.relationship && <span className="pps-row-rel">{p.relationship}</span>
+                  )}
                 </span>
                 <ChevronRightIcon size={28} className="pps-row-chevron" />
               </button>
