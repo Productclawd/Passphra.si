@@ -106,7 +106,8 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(networkFirstPage(request));
     return;
   }
-  if (isCacheableAsset(url) && url.pathname !== BASE + "sw.js") {
+  // The explainer video streams with range requests, which the cache can't store.
+  if (isCacheableAsset(url) && url.pathname !== BASE + "sw.js" && !url.pathname.endsWith(".mp4")) {
     event.respondWith(cacheFirst(request));
   }
 });

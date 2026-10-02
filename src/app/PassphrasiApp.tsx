@@ -16,6 +16,7 @@ import { ChevronRightIcon, ShieldIcon } from "./Icons";
 import { InstallHelp } from "./InstallHelp";
 import { EditPersonScreen, FridgeCardScreen, GateScreen, ManageScreen } from "./ManageScreens";
 import { PairingFlow } from "./PairingFlow";
+import { ExplainerVideo } from "./ExplainerVideo";
 import { HowItWorks } from "./HowItWorks";
 import { LinkScreen, LinkStartScreen, PendingInvites } from "./RemotePairing";
 import { Monogram, SourceLink, type Nav, type Screen } from "./shared";
@@ -340,6 +341,7 @@ function SetupScreen({ onDone }: { onDone: (name: string) => Promise<void> }) {
         every minute, so you can check who you&rsquo;re talking to before sending money or a code.
       </p>
       <HowItWorks />
+      <ExplainerVideo />
       <p className="pps-small">
         Best set up together, in person, or by sending a link. No account, no sign-up, and your
         words are never sent anywhere.
