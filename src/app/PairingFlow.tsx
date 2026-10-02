@@ -49,7 +49,7 @@ export function PairingFlow({ ownerName, existing, nav, onSaved }: PairingFlowPr
           <BackButton onClick={nav.back} />
         </div>
         <p className="pps-caps">Step 1 of 2</p>
-        <h1 className="pps-headline">Hold the other phone over this code</h1>
+        <h1 className="pps-headline">Scan this with Passphra.si on the other phone</h1>
         <div className="pps-card pps-qr">
           <QRCodeSVG
             value={encodePairingQr(stage.secret, ownerName)}
@@ -83,7 +83,7 @@ export function PairingFlow({ ownerName, existing, nav, onSaved }: PairingFlowPr
             className="pps-btn pps-btn-primary"
             onClick={() => toDetails(stage.secret, "A", "")}
           >
-            The other phone has scanned it
+            Done. It was scanned
           </button>
           <button
             type="button"
