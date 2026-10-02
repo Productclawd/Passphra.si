@@ -1,31 +1,8 @@
 @import "tailwindcss";
 
-:root {
-  color-scheme: dark;
-}
-
 html,
 body {
-  background: #05070d;
-  color: #e7eaf2;
+  margin: 0;
+  background: #faf9f5;
   min-height: 100%;
-}
-
-body {
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    sans-serif;
-  background:
-    radial-gradient(1200px 600px at 80% -10%, rgba(34, 197, 94, 0.12), transparent 60%),
-    radial-gradient(900px 500px at 0% 110%, rgba(59, 130, 246, 0.1), transparent 60%),
-    #05070d;
-}
-
-::selection {
-  background: rgba(34, 197, 94, 0.35);
 }
