@@ -18,6 +18,8 @@ import { BackButton, Monogram, photoToDataUrl, RELATIONSHIPS, type Nav } from ".
 
 interface PairingFlowProps {
   ownerName: string;
+  /** Everyone already on this phone, so re-pairing a name replaces it. */
+  people: Person[];
   /** Set when re-pairing someone already on the list (new or lost phone). */
   existing: Person | null;
   nav: Nav;
@@ -30,7 +32,7 @@ type Stage =
   | { step: "details"; key: CryptoKey; role: PairRole; scannedName: string }
   | { step: "done"; name: string };
 
-export function PairingFlow({ ownerName, existing, nav, onSaved }: PairingFlowProps) {
+export function PairingFlow({ ownerName, people, existing, nav, onSaved }: PairingFlowProps) {
   const [stage, setStage] = useState<Stage>(() => ({ step: "show", secret: newSecret() }));
   const [scanNote, setScanNote] = useState<string | null>(null);
 
@@ -155,6 +157,7 @@ export function PairingFlow({ ownerName, existing, nav, onSaved }: PairingFlowPr
     return (
       <DetailsStep
         existing={existing}
+        people={people}
         cryptoKey={stage.key}
         role={stage.role}
         scannedName={stage.scannedName}
@@ -202,6 +205,7 @@ export function PairedScreen({ name, nav }: { name: string; nav: Nav }) {
 
 interface DetailsStepProps {
   existing: Person | null;
+  people: Person[];
   cryptoKey: CryptoKey;
   role: PairRole;
   scannedName: string;
@@ -213,6 +217,7 @@ interface DetailsStepProps {
 
 export function DetailsStep({
   existing,
+  people,
   cryptoKey,
   role,
   scannedName,
@@ -232,6 +237,14 @@ export function DetailsStep({
     pairingCheckWord(cryptoKey).then(setCheckWord);
   }, [cryptoKey]);
 
+  // Pairing the same name again replaces the old entry rather than adding a
+  // second "Lior" with an old key — tapping that one would show words that
+  // no longer match their phone.
+  const sameName =
+    existing ??
+    people.find((p: Person) => p.name.trim().toLowerCase() === name.trim().toLowerCase()) ??
+    null;
+
   const canSave = name.trim().length > 0 && !saving;
 
   const save = async () => {
@@ -241,14 +254,14 @@ export function DetailsStep({
     try {
       const trimmed = name.trim();
       await savePerson({
-        id: existing?.id ?? newId(),
+        id: sameName?.id ?? newId(),
         name: trimmed,
-        relationship: relationship.trim(),
-        phone: phone.trim(),
-        photo,
+        relationship: relationship.trim() || sameName?.relationship || "",
+        phone: phone.trim() || sameName?.phone || "",
+        photo: photo ?? sameName?.photo ?? null,
         role,
         key: cryptoKey,
-        pairedAt: existing?.pairedAt ?? Date.now(),
+        pairedAt: sameName?.pairedAt ?? Date.now(),
       });
       await onSaved(trimmed);
     } catch {
@@ -294,6 +307,11 @@ export function DetailsStep({
           placeholder="Lior"
         />
       </label>
+      {sameName && !existing && (
+        <p className="pps-small">
+          {sameName.name} is already on this phone. Saving replaces that older pairing.
+        </p>
+      )}
 
       <div className="pps-field">
         <span className="pps-label">They are your…</span>

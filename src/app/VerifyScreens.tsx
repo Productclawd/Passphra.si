@@ -69,9 +69,16 @@ export function VerifyScreen({ person, nav }: PersonScreenProps) {
   else if (words && msLeft < DRIFT_GRACE_MS) alsoOk = words.next[theirs];
 
   return (
-    <div className="pps-screen">
-      <div className="pps-topbar">
+    <div className="pps-screen pps-verify">
+      <div className="pps-topbar pps-topbar-split">
         <BackButton onClick={nav.back} />
+        <button
+          type="button"
+          className="pps-link pps-link-quiet"
+          onClick={() => nav.push({ name: "editPerson", id: person.id })}
+        >
+          Edit or remove
+        </button>
       </div>
 
       <div className="pps-checking">

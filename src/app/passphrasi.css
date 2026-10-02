@@ -765,6 +765,57 @@
   color: var(--pps-ink-2);
 }
 
+/* ── Words screen: fits one screen, both buttons visible ─────────────── */
+
+.pps-topbar-split {
+  justify-content: space-between;
+}
+
+.pps-verify {
+  gap: 14px;
+}
+
+.pps-verify .pps-monogram-lg {
+  width: 56px;
+  height: 56px;
+  font-size: 1.6em;
+}
+
+.pps-verify .pps-checking-name {
+  font-size: 1.8em;
+}
+
+.pps-verify .pps-words-half {
+  padding: 14px 20px 16px;
+}
+
+/* Words scale with screen height too, so a short phone keeps the buttons in view. */
+.pps-verify .pps-word {
+  font-size: min(3.4em, 15vw, 7.5dvh);
+}
+
+.pps-verify .pps-btn {
+  min-height: 60px;
+}
+
+@media (max-height: 720px) {
+  .pps-verify {
+    gap: 10px;
+  }
+  .pps-verify .pps-checking-label {
+    display: none;
+  }
+  .pps-verify .pps-words-half {
+    padding: 10px 18px 12px;
+  }
+  .pps-verify .pps-word {
+    font-size: min(3em, 14vw, 7dvh);
+  }
+  .pps-verify .pps-btn {
+    min-height: 54px;
+  }
+}
+
 /* ── Pairing by link ───────────────────────────────────────────────────── */
 
 .pps-link-icon {

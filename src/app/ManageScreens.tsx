@@ -160,7 +160,7 @@ export function EditPersonScreen({ person, nav, onChanged }: EditPersonScreenPro
   const remove = async () => {
     await removePerson(person.id);
     await onChanged();
-    nav.back();
+    nav.home();
   };
 
   return (

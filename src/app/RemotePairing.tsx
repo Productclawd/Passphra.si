@@ -457,6 +457,7 @@ export function LinkScreen({ link, ownerName, people, nav, onChanged }: LinkScre
       return (
         <DetailsStep
           existing={stage.existing}
+          people={people}
           cryptoKey={stage.key}
           role={stage.role}
           scannedName={link.name}
