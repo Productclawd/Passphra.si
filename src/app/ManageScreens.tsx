@@ -111,7 +111,7 @@ export function ManageScreen({ ownerName, people, nav, onChanged }: ManageScreen
       </button>
 
       <h2 className="pps-subhead">Home screen</h2>
-      <InstallHelp />
+      <InstallHelp moment="settings" />
 
       <h2 className="pps-subhead">New or lost phone</h2>
       <p className="pps-small">

@@ -15,7 +15,7 @@ export function ExplainerVideo() {
         preload="none"
         aria-label="30-second video: how Passphra.si works"
       />
-      <figcaption className="pps-small">Watch how it works (30 seconds, captioned)</figcaption>
+      <figcaption className="pps-video-caption">How it works · 30 seconds</figcaption>
     </figure>
   );
 }

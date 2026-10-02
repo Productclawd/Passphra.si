@@ -12,6 +12,7 @@ import {
 } from "@/lib/passphrasi/words-engine";
 import { newId, savePerson, type Person } from "@/lib/passphrasi/store";
 import { CameraIcon, CheckIcon, LinkIcon, LockIcon, PrinterIcon } from "./Icons";
+import { InstallHelp } from "./InstallHelp";
 import { QrScanner } from "./QrScanner";
 import { BackButton, Monogram, photoToDataUrl, RELATIONSHIPS, type Nav } from "./shared";
 
@@ -48,7 +49,7 @@ export function PairingFlow({ ownerName, existing, nav, onSaved }: PairingFlowPr
           <BackButton onClick={nav.back} />
         </div>
         <p className="pps-caps">Step 1 of 2</p>
-        <h1 className="pps-headline">Hold the other phone over this code</h1>
+        <h1 className="pps-headline">Scan this with Passphra.si on the other phone</h1>
         <div className="pps-card pps-qr">
           <QRCodeSVG
             value={encodePairingQr(stage.secret, ownerName)}
@@ -66,17 +67,23 @@ export function PairingFlow({ ownerName, existing, nav, onSaved }: PairingFlowPr
             Do this together, in person. The key stays on these two phones and never goes online.
           </span>
         </p>
-        <p className="pps-small">
-          On the other phone, open Passphra.si, tap <strong>Add someone</strong>, then{" "}
-          <strong>Scan their code instead</strong>.
-        </p>
+        <div className="pps-card pps-confirm">
+          <p className="pps-body">
+            On the other phone, open Passphra.si, tap <strong>Add someone</strong>, then{" "}
+            <strong>Scan their code instead</strong>.
+          </p>
+          <p className="pps-small">
+            The phone&rsquo;s camera app can&rsquo;t read this code. That&rsquo;s on purpose: the key
+            only goes into Passphra.si.
+          </p>
+        </div>
         <div className="pps-actions">
           <button
             type="button"
             className="pps-btn pps-btn-primary"
             onClick={() => toDetails(stage.secret, "A", "")}
           >
-            The other phone has scanned it
+            Done. It was scanned
           </button>
           <button
             type="button"
@@ -175,6 +182,7 @@ export function PairedScreen({ name, nav }: { name: string; nav: Nav }) {
           Next time {name} calls and asks for money or a code, open this app and tap their name.
         </p>
       </div>
+      <InstallHelp moment="paired" />
       <div className="pps-actions">
         <button type="button" className="pps-btn pps-btn-primary" onClick={nav.home}>
           Done

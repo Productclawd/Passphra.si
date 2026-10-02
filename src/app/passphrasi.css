@@ -939,6 +939,12 @@
   margin: 0;
 }
 
+.pps-video-caption {
+  align-self: center;
+  font-size: 0.8em;
+  color: var(--pps-ink-2);
+}
+
 .pps-video-player {
   width: 100%;
   aspect-ratio: 1 / 1;
