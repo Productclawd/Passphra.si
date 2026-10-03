@@ -12,8 +12,10 @@ import {
 } from "@/lib/passphrasi/store";
 import { parsePairingLink, type PairingLink } from "@/lib/passphrasi/remote-pairing";
 import { BASE_PATH } from "@/lib/base-path";
+import { canStoreKeys, detectInAppBrowser } from "@/lib/passphrasi/in-app-browser";
 import { ChevronRightIcon, ShieldIcon } from "./Icons";
-import { InstallHelp } from "./InstallHelp";
+import { InstallHelp, isInstalled } from "./InstallHelp";
+import { OpenInBrowserScreen } from "./OpenInBrowser";
 import { EditPersonScreen, FridgeCardScreen, GateScreen, ManageScreen } from "./ManageScreens";
 import { PairingFlow } from "./PairingFlow";
 import { ExplainerVideo } from "./ExplainerVideo";
@@ -23,6 +25,13 @@ import { Monogram, SourceLink, type Nav, type Screen } from "./shared";
 import { NotThemScreen, VerifiedScreen, VerifyScreen } from "./VerifyScreens";
 
 const HOME: Screen = { name: "home" };
+
+/** Why this browser gets the "open it in Safari" screen instead of the app. */
+interface WrongBrowser {
+  url: string;
+  app: string | null;
+  storageFailed: boolean;
+}
 
 /**
  * Reads a pairing link out of the address bar and clears it, so a refresh or
@@ -122,10 +131,10 @@ export function PassphrasiApp() {
     return settings;
   }, []);
 
-  useEffect(() => {
+  const [wrongBrowser, setWrongBrowser] = useState<WrongBrowser | null>(null);
+
+  const start = useCallback(() => {
     const opened = takeLinkFromUrl();
-    // Loading from IndexedDB is syncing with an external system, which is what effects are for.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     reload()
       .then((settings: Awaited<ReturnType<typeof getSettings>>) => {
         if (!settings) {
@@ -140,6 +149,24 @@ export function PassphrasiApp() {
     registerOffline();
   }, [reload, reset]);
 
+  useEffect(() => {
+    // Read before anything clears the #fragment: a pairing link must survive
+    // the trip to the real browser.
+    const url = window.location.href;
+    const inApp = detectInAppBrowser(isInstalled());
+    if (inApp) {
+      // Checking the browser we were opened in is syncing with an external system.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setWrongBrowser({ url, app: inApp.app, storageFailed: false });
+      setLoaded(true);
+      return;
+    }
+    start();
+    canStoreKeys().then((ok: boolean) => {
+      if (!ok) setWrongBrowser({ url, app: null, storageFailed: true });
+    });
+  }, [start]);
+
   // A link opened while the app is already showing in this tab.
   useEffect(() => {
     const onHash = () => {
@@ -149,6 +176,26 @@ export function PassphrasiApp() {
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, [reset]);
+
+  if (wrongBrowser) {
+    const guessed = wrongBrowser.app === null && !wrongBrowser.storageFailed;
+    return (
+      <OpenInBrowserScreen
+        url={wrongBrowser.url}
+        app={wrongBrowser.app}
+        storageFailed={wrongBrowser.storageFailed}
+        onContinue={
+          guessed
+            ? () => {
+                setWrongBrowser(null);
+                setLoaded(false);
+                start();
+              }
+            : undefined
+        }
+      />
+    );
+  }
 
   if (!loaded) return <div className="pps-screen" aria-busy="true" />;
 
